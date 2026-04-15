@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dentsu + Adobe · Summit Mobile Cheat Sheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --b2b: #00d6e9; --crm: #F0C1C1; --ai: #A68CFF; --csc: #FF5023; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: #0e0e0e;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- FULL PAGE BACKGROUND ---- */
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .page-bg svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    preserveAspectRatio: xMidYMid slice;
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    position: relative;
+    
+    display: flex; align-items: center; justify-content: center;
+    padding: 48px 24px 28px;
+  }
+  .hero-bg { display: none; }
+  .hero-bg svg { display: none; }
+  @keyframes float-a { 0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)} }
+  @keyframes float-b { 0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)} }
+  .float-a { animation: float-a 7s ease-in-out infinite; }
+  .float-b { animation: float-b 9s ease-in-out infinite 1.5s; }
+  .hero-content { position: relative; z-index: 1; text-align: center; }
+  .catalog { position: relative; z-index: 1; }
+  .hero-title {
+    font-size: clamp(40px, 8vw, 68px); font-weight: 800;
+    letter-spacing: -3px; line-height: 1; margin-bottom: 12px;
+  }
+  .hero-title .adobe {
+    background: linear-gradient(90deg, #fb2c36, #ff7443 50%, #a68cff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-title .plus { color: #616ed8; }
+  .hero-sub { font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:#737373; }
+
+  /* ---- CATALOG ---- */
+  .catalog { max-width: 800px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; padding-top: 4px; }
+
+  /* ---- CATEGORY BLOCK ---- */
+  .cat-block { margin-bottom: 10px; }
+
+  .cat-trigger {
+    width: 100%; display: flex; align-items: center; gap: 14px;
+    padding: 18px 22px;
+    background: rgba(22,22,22,0.9);
+    border: 1px solid rgba(72,72,71,0.25);
+    border-radius: 12px;
+    cursor: pointer; text-align: left;
+    transition: background 0.2s, border-radius 0.01s;
+  }
+  .cat-block.open .cat-trigger {
+    border-radius: 12px 12px 0 0;
+    border-bottom-color: rgba(255,255,255,0.04);
+  }
+  .cat-trigger:hover { background: rgba(30,30,30,0.95); }
+  .cat-icon-wrap { width:34px; height:34px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .cat-title { font-size:20px; font-weight:800; letter-spacing:-0.5px; flex:1; }
+  .cat-meta { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+  .cat-count { font-family:'Space Grotesk',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#444; }
+  .cat-chevron { width:18px; height:18px; color:#444; transition:transform 0.3s ease, color 0.2s; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .cat-block.open .cat-chevron { transform:rotate(180deg); color:#666; }
+
+  /* open border accents */
+  .cat-block.open.cb2b .cat-trigger { border-color: rgba(0,214,233,0.3); border-bottom-color: rgba(0,214,233,0.07); }
+  .cat-block.open.ccrm .cat-trigger { border-color: rgba(240,193,193,0.25); border-bottom-color: rgba(240,193,193,0.05); }
+  .cat-block.open.cai  .cat-trigger { border-color: rgba(166,140,255,0.25); border-bottom-color: rgba(166,140,255,0.05); }
+  .cat-block.open.ccsc .cat-trigger { border-color: rgba(255,80,35,0.25); border-bottom-color: rgba(255,80,35,0.05); }
+
+  /* ---- DEMOS WRAP ---- */
+  .demos-wrap {
+    border: 1px solid rgba(72,72,71,0.25); border-top: none;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .cat-block.open .demos-wrap { max-height: 9999px; }
+  .cat-block.open.cb2b .demos-wrap { border-color: rgba(0,214,233,0.3); }
+  .cat-block.open.ccrm .demos-wrap { border-color: rgba(240,193,193,0.25); }
+  .cat-block.open.cai  .demos-wrap { border-color: rgba(166,140,255,0.25); }
+  .cat-block.open.ccsc .demos-wrap { border-color: rgba(255,80,35,0.25); }
+
+  /* ---- DEMO ITEM ---- */
+  .demo-item { border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(14,14,14,0.6); }
+  .demo-item:last-child { border-bottom: none; }
+  .demo-item.open { background: rgba(18,18,18,0.85); }
+
+  .demo-trigger {
+    width: 100%; display: flex; align-items: center; gap: 12px;
+    padding: 16px 22px;
+    background: none; border: none; cursor: pointer; text-align: left;
+    transition: background 0.15s;
+  }
+  .demo-trigger:hover { background: rgba(255,255,255,0.022); }
+
+  .demo-trigger-name { font-size: 15px; font-weight: 700; color: #e8e8e8; flex: 1; line-height: 1.3; }
+  .demo-trigger-right { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 999px;
+    font-family:'Space Grotesk',sans-serif; font-size:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  }
+  .live-dot { width:5px; height:5px; border-radius:50%; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+  .live-dot { animation: pulse 1.5s infinite; }
+
+  .demo-chevron { width:16px; height:16px; color:#3a3a3a; transition:transform 0.3s ease, color 0.2s; display:flex; align-items:center; justify-content:center; }
+  .demo-item.open .demo-chevron { transform:rotate(180deg); color:#666; }
+
+  /* ---- DEMO BODY ---- */
+  .demo-body { overflow:hidden; max-height:0; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .demo-item.open .demo-body { max-height: 1800px; }
+  .demo-body-inner { padding: 4px 22px 22px; }
+
+  /* Best For */
+  .best-for {
+    background: rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.07);
+    border-radius:8px; padding:10px 13px; margin-bottom:13px;
+    display:flex; align-items:flex-start; gap:10px;
+  }
+  .best-for-label { font-family:'Space Grotesk',sans-serif; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; font-weight:600; color:#494949; flex-shrink:0; margin-top:2px; }
+  .best-for-text { font-size:12.5px; color:#999; line-height:1.55; }
+
+  .bf-b2b { border-color: rgba(0,214,233,0.18) !important; }
+  .bf-crm { border-color: rgba(240,193,193,0.16) !important; }
+  .bf-ai  { border-color: rgba(166,140,255,0.18) !important; }
+  .bf-csc { border-color: rgba(255,80,35,0.18) !important; }
+
+  /* Tags */
+  .tags-row { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:13px; }
+  .tag { font-family:'Space Grotesk',sans-serif; font-size:9.5px; font-weight:500; letter-spacing:0.4px; padding:3px 9px; border-radius:5px; border:1px solid; }
+  .tag.adobe-tag { background:rgba(251,44,54,0.07); border-color:rgba(251,44,54,0.2); color:#e86a6b; }
+  .tag.other-tag { background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.09); color:#777; }
+
+  /* Summary */
+  .demo-summary { font-size:13px; color:#999; line-height:1.7; margin-bottom:16px; }
+
+  /* Takeaways */
+  .takeaways-heading { font-family:'Space Grotesk',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#444; font-weight:600; margin-bottom:11px; }
+  .takeaways-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  @media(max-width:520px){ .takeaways-grid{ grid-template-columns:1fr; } }
+  .takeaway-item { display:flex; align-items:flex-start; gap:9px; }
+  .takeaway-bullet { width:5px; height:5px; border-radius:50%; margin-top:7px; flex-shrink:0; }
+  .takeaway-text { font-size:11.5px; color:#666; line-height:1.65; }
+  .takeaway-text strong { color:#999; font-weight:600; }
+
+  /* Accent helpers */
+  .ab2b{color:#00d6e9} .acrm{color:#F0C1C1} .aai{color:#A68CFF} .acsc{color:#FF5023}
+  .lb2b{background:#00d6e9;color:#000} .lb2b .live-dot{background:#000}
+  .lcrm{background:#F0C1C1;color:#1a0a0a} .lcrm .live-dot{background:#1a0a0a}
+  .lai{background:#A68CFF;color:#0e0820} .lai .live-dot{background:#0e0820}
+  .lcsc{background:#FF5023;color:#000} .lcsc .live-dot{background:#000}
+  .bb2b{background:#00d6e9} .bcrm{background:#F0C1C1} .bai{background:#A68CFF} .bcsc{background:#FF5023}
+
+  @media(max-width:600px){
+    .cat-title{font-size:17px} .cat-count{display:none}
+    .demo-trigger-name{font-size:13px}
+    .hero-title{letter-spacing:-1.5px}
+  }
+
+  /* ---- DAY PILLS ---- */
+  .day-pills {
+    display: flex; gap: 10px; justify-content: center;
+    margin-top: 10px;
+  }
+  .day-pill {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    padding: 8px 22px; border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #ccc; cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .day-pill:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); color: #fff; }
+
+  /* ---- SCHEDULE MODAL ---- */
+  .sched-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .sched-overlay.open { opacity: 1; pointer-events: all; }
+  .sched-modal {
+    background: #141414;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    width: 100%; max-width: 640px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 28px 28px 20px;
+    position: relative;
+    transform: translateY(12px);
+    transition: transform 0.25s ease;
+  }
+  .sched-overlay.open .sched-modal { transform: translateY(0); }
+  .sched-close {
+    position: absolute; top: 16px; right: 18px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%; width: 28px; height: 28px;
+    color: #888; font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .sched-close:hover { background: rgba(255,255,255,0.13); color: #fff; }
+  .sched-header { margin-bottom: 16px; }
+  .sched-day-label {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #fff; line-height: 1;
+  }
+  .sched-hours {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #555; margin-top: 5px;
+  }
+  .sched-legend {
+    display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px;
+    padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .legend-pill {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; font-weight: 600; padding: 3px 11px; border-radius: 999px;
+  }
+  .sched-slot {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.045);
+  }
+  .sched-slot:last-child { border-bottom: none; }
+  .sched-time {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11.5px; color: #666; min-width: 130px; flex-shrink: 0; padding-top: 2px;
+    white-space: nowrap;
+  }
+  .sched-names { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sched-name-pill {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 600; padding: 3px 11px; border-radius: 999px;
+  }
+  .sched-footer {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #444;
+    text-align: center; margin-top: 18px; padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  @media(max-width: 500px) {
+    .sched-modal { padding: 22px 18px 16px; }
+    .sched-time { min-width: 100px; font-size: 10.5px; }
+    .sched-name-pill { font-size: 10px; padding: 3px 9px; }
+  }
+
+  /* ---- SECTION DIVIDER ---- */
+  .h-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    margin: 8px 0;
+    position: relative; z-index: 1;
+  }
+
+  /* ---- CONTENT PILLS (positioning / diff / sins) ---- */
+  .content-pills {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .content-pill {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 9px 20px; border-radius: 999px;
+    border: 1px solid; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .content-pill:hover { opacity: 0.82; transform: scale(1.03); }
+  .content-pill.teal  { background: rgba(0,214,233,0.12); border-color: rgba(0,214,233,0.4); color: #00d6e9; }
+  .content-pill.purple{ background: rgba(166,140,255,0.12); border-color: rgba(166,140,255,0.4); color: #A68CFF; }
+  .content-pill.red   { background: rgba(251,44,54,0.1); border-color: rgba(251,44,54,0.35); color: #fb2c36; }
+
+  /* ---- CONTENT MODAL (shared with schedule overlay) ---- */
+  .content-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.78);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .content-overlay.open { opacity: 1; pointer-events: all; }
+  .content-modal {
+    background: #141414;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    width: 100%; max-width: 600px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 32px 30px 28px;
+    position: relative;
+    transform: translateY(14px);
+    transition: transform 0.25s ease;
+  }
+  .content-overlay.open .content-modal { transform: translateY(0); }
+  .content-modal-close {
+    position: absolute; top: 16px; right: 18px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%; width: 28px; height: 28px;
+    color: #888; font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .content-modal-close:hover { background: rgba(255,255,255,0.13); color: #fff; }
+  .content-modal-eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 8px;
+  }
+  .content-modal-title {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #fff;
+    line-height: 1.2; margin-bottom: 20px; padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .content-section { margin-bottom: 22px; }
+  .content-section-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    font-weight: 600; color: #555; margin-bottom: 7px;
+  }
+  .content-section-body {
+    font-size: 13.5px; color: #999; line-height: 1.75;
+  }
+  .content-section-body strong { color: #ccc; font-weight: 700; }
+  .sin-item {
+    display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start;
+  }
+  .sin-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    min-width: 22px; padding-top: 2px; flex-shrink: 0;
+  }
+  .sin-body { font-size: 13px; color: #999; line-height: 1.7; }
+  .sin-body strong { color: #ddd; font-weight: 700; display: block; margin-bottom: 3px; }
+  .force-item { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+  .force-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 800; color: #333; flex-shrink: 0; min-width: 22px;
+  }
+  .force-body { font-size: 13px; color: #999; line-height: 1.7; }
+  .force-body strong { color: #ddd; font-weight: 700; display: block; margin-bottom: 3px; }
+  @media(max-width:500px){
+    .content-modal { padding: 24px 18px 20px; }
+    .content-modal-title { font-size: 19px; }
+  }
+
+  .best-for-label.cl-b2b { color: #00d6e9; }
+  .best-for-label.cl-crm { color: #F0C1C1; }
+  .best-for-label.cl-ai  { color: #A68CFF; }
+  .best-for-label.cl-csc { color: #FF5023; }
+  .takeaways-heading.cl-b2b { color: #00d6e9; }
+  .takeaways-heading.cl-crm { color: #F0C1C1; }
+  .takeaways-heading.cl-ai  { color: #A68CFF; }
+  .takeaways-heading.cl-csc { color: #FF5023; }
+</style>
+</head>
+<body>
+
+<!-- FIXED FULL-PAGE BACKGROUND -->
+<div class="page-bg">
+  <svg viewBox="0 0 1280 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;position:absolute;inset:0;">
+    <defs>
+      <filter id="f0" x="-25%" y="-25%" width="150%" height="150%"><feFlood flood-opacity="0" result="b"/><feBlend in="SourceGraphic" in2="b" result="s"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="ha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="5"/><feComposite in2="ha" operator="arithmetic" k2="-1" k3="1"/><feColorMatrix type="matrix" values="0 0 0 0 .317 0 0 0 0 .317 0 0 0 0 .317 0 0 0 1 0"/><feBlend in2="s"/></filter>
+      <filter id="f1" x="-25%" y="-25%" width="150%" height="150%"><feFlood flood-opacity="0" result="b"/><feBlend in="SourceGraphic" in2="b" result="s"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="ha"/><feOffset dy="3"/><feGaussianBlur stdDeviation="7"/><feComposite in2="ha" operator="arithmetic" k2="-1" k3="1"/><feColorMatrix type="matrix" values="0 0 0 0 .317 0 0 0 0 .317 0 0 0 0 .317 0 0 0 1 0"/><feBlend in2="s"/></filter>
+    </defs>
+    <!-- left decorative lines -->
+    <rect x="246" y="-12" width="30" height="2000" fill="#FB3B16" opacity="0.7"/>
+    <rect x="-9" y="-100" width="29" height="2800" transform="rotate(-8.95 -9 -100)" fill="#F0C1C1" opacity="0.6"/>
+    <!-- right decorative lines -->
+    <rect x="1231" y="-80" width="30" height="2400" transform="rotate(7.98 1231 -80)" fill="#616ED8" opacity="0.6"/>
+    <!-- floating circles left -->
+    <g class="float-a"><g filter="url(#f0)"><circle cx="93" cy="300" r="113" fill="#323232"/></g></g>
+    <g class="float-b"><g filter="url(#f0)"><circle cx="160" cy="180" r="12" fill="#323232"/></g></g>
+    <g class="float-a"><g filter="url(#f0)"><circle cx="80" cy="750" r="70" fill="#2a2a2a"/></g></g>
+    <!-- floating circles right -->
+    <g class="float-a"><g filter="url(#f1)"><circle cx="1251" cy="200" r="150" transform="rotate(180 1251 200)" fill="#323232"/></g></g>
+    <g class="float-b"><g filter="url(#f0)"><circle cx="1200" cy="620" r="80" fill="#2a2a2a"/></g></g>
+    <g class="float-a"><g filter="url(#f0)"><circle cx="1240" cy="950" r="110" fill="#2a2a2a"/></g></g>
+  </svg>
+</div>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Dentsu&nbsp;<span class="plus">+</span>&nbsp;<span class="adobe">Adobe</span></h1>
+    <p class="hero-sub">Summit Mobile Cheat Sheet</p>
+    <div class="day-pills">
+      <button class="day-pill" onclick="openSchedule('mon')">MON</button>
+      <button class="day-pill" onclick="openSchedule('tue')">TUES</button>
+      <button class="day-pill" onclick="openSchedule('wed')">WED</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDULE MODAL -->
+<div class="sched-overlay" id="sched-overlay" onclick="closeSchedule(event)">
+  <div class="sched-modal">
+    <button class="sched-close" onclick="closeScheduleBtn()">&#x2715;</button>
+    <div class="sched-header">
+      <div class="sched-day-label" id="sched-day-label"></div>
+      <div class="sched-hours" id="sched-hours"></div>
+    </div>
+    <div class="sched-legend" id="sched-legend"></div>
+    <div class="sched-body" id="sched-body"></div>
+    <div class="sched-footer">All times PST &middot; Las Vegas &middot; 4 people per slot maintained throughout</div>
+  </div>
+</div>
+
+
+<!-- CONTENT MODALS -->
+<div class="content-overlay" id="overlay-positioning" onclick="closeContentModal('positioning', event)">
+  <div class="content-modal">
+    <button class="content-modal-close" onclick="closeContentModalBtn('positioning')">&#x2715;</button>
+    <div class="content-modal-eyebrow" style="color:#00d6e9">Our Positioning</div>
+    <div class="content-modal-title">Your Marketing Operating System Is Broken.</div>
+    <div class="content-section">
+      <div class="content-section-body">Everyone is selling you the future. Consultancies sell you a platform. Holdcos sell you a workflow. <strong>We are the ones in the trenches building it — with you and beside you.</strong> We have the power to transform how your entire marketing organization thinks, creates, and performs. Because we live it every day.</div>
+    </div>
+    <div class="content-section">
+      <div class="content-section-label">The Real Problem</div>
+      <div class="content-section-body">They are calling it a "content supply chain" and waving agentic AI like a magic wand — while your teams drown in approval queues, tech stacks gather dust, and org charts look like they were designed for Y2K. <strong>Your platform is not the problem. Your operating system is.</strong> Not software — the people, process, culture, and connective tissue between media, creative, production, and technology.</div>
+    </div>
+    <div class="content-section">
+      <div class="content-section-label">The Real Bottleneck</div>
+      <div class="content-section-body">It was never content production. It is the quality of decisions at every stage — what to say, how to say it, where to place it, how to scale it. Every campaign is the product of that decision chain. <strong>The output is never better than the weakest link.</strong></div>
+    </div>
+    <div class="content-section">
+      <div class="content-section-label">Every CMO Feels These Three Forces</div>
+      <div class="force-item"><div class="force-number">1</div><div class="force-body"><strong>Maximize every investment.</strong>Growth number and an efficiency number, same budget. The CFO is watching every line item.</div></div>
+      <div class="force-item"><div class="force-number">2</div><div class="force-body"><strong>Create more, faster.</strong>Channels and audiences are exploding. But optimizing for the algorithm makes every brand look identical. More content without intelligence disappears.</div></div>
+      <div class="force-item"><div class="force-number">3</div><div class="force-body"><strong>AI is exposing organizational debt.</strong>AI does not fix broken decision architecture — it scales it. The readiness question is not which tools. It is whether your data flows are sound enough to compound the investment.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="content-overlay" id="overlay-differentiator" onclick="closeContentModal('differentiator', event)">
+  <div class="content-modal">
+    <button class="content-modal-close" onclick="closeContentModalBtn('differentiator')">&#x2715;</button>
+    <div class="content-modal-eyebrow" style="color:#A68CFF">Our Differentiator</div>
+    <div class="content-modal-title">We Are Practitioners, Not Consultants.</div>
+    <div class="content-section">
+      <div class="content-section-body">There is a model that looks like transformation from the outside: diagnose, framework, roadmap, handover. The client calls six months later wondering why none of it worked. <strong>We don't separate the thinking from the making.</strong> Consultancies diagnose from the outside. Point solutions optimize one stage. Dentsu sees the full chain because we run it.</div>
+    </div>
+    <div class="content-section">
+      <div class="content-section-label">We Work In The Business</div>
+      <div class="content-section-body">We run marketing, CRM, DX, ecommerce, and martech infrastructure for some of the world's leading brands. We understand how the sausage gets made because we are on the line every day.</div>
+    </div>
+    <div class="content-section">
+      <div class="content-section-label">We Work On The Business</div>
+      <div class="content-section-body">Execution without transformation is faster output. Transformation without execution is a deck. <strong>We bring world-class business strategy and premier creative production to every engagement</strong> — not as separate workstreams, but as one operating system.</div>
+    </div>
+    <div class="content-section">
+      <div class="content-section-label">We Architect The Decisions</div>
+      <div class="content-section-body">We design how insights reach creative, how performance data reaches the next brief, and how every stage inherits the reasoning from the one before it. We build the <strong>feedback loops that make decisions compound over time</strong> instead of resetting every quarter.</div>
+    </div>
+    <div class="content-section">
+      <div class="content-section-label">We Prove It With Adobe</div>
+      <div class="content-section-body">We are Adobe's creative agency, and we run their tools inside the same decision systems we build for clients. <strong>GenStudio Dentsu+ powers the asset layer and orchestrates distribution.</strong> We don't just recommend the platform — we operate it. We are living it, doing this to ourselves, with Adobe, and know firsthand how hard it is.</div>
+    </div>
+  </div>
+</div>
+
+<div class="content-overlay" id="overlay-sins" onclick="closeContentModal('sins', event)">
+  <div class="content-modal">
+    <button class="content-modal-close" onclick="closeContentModalBtn('sins')">&#x2715;</button>
+    <div class="content-modal-eyebrow" style="color:#fb2c36">The 7 Deadly Sins</div>
+    <div class="content-modal-title">The traps we help you avoid.</div>
+    <div class="sin-item"><div class="sin-number" style="color:#fb2c36">1</div><div class="sin-body"><strong>"AI" is not a strategy. Neither is "Agentic."</strong>If your AI roadmap starts with tool selection instead of decision architecture, you are automating your existing failures faster.</div></div>
+    <div class="sin-item"><div class="sin-number" style="color:#fb2c36">2</div><div class="sin-body"><strong>Technology will not save you without people and process.</strong>A platform with no adoption plan is shelfware. The connective tissue between teams matters more than the stack.</div></div>
+    <div class="sin-item"><div class="sin-number" style="color:#fb2c36">3</div><div class="sin-body"><strong>If you build it, they will not come.</strong>Rollout is not adoption. If your teams were not part of the design, they will route around the solution.</div></div>
+    <div class="sin-item"><div class="sin-number" style="color:#fb2c36">4</div><div class="sin-body"><strong>Content in a vacuum is content that dies.</strong>A designer without performance data, a media buyer without creative rationale — severed context at every handoff is the most expensive failure pattern.</div></div>
+    <div class="sin-item"><div class="sin-number" style="color:#fb2c36">5</div><div class="sin-body"><strong>Scale without velocity is standing still.</strong>Producing 10x the assets means nothing if every stage rebuilds its context from scratch. Speed comes from decisions that persist and compound.</div></div>
+    <div class="sin-item"><div class="sin-number" style="color:#fb2c36">6</div><div class="sin-body"><strong>Efficiency without growth is a slow death.</strong>Cost-cutting your way to the bottom line works once. Sustained performance requires better decisions, not just cheaper execution.</div></div>
+    <div class="sin-item"><div class="sin-number" style="color:#fb2c36">7</div><div class="sin-body"><strong>You cannot be half in.</strong>Partial commitment across disconnected pilots produces disconnected results. Transformation is a system-level commitment or it is theater.</div></div>
+  </div>
+</div>
+
+<div class="catalog">
+
+
+  <!-- ══ B2B TRANSFORMATION ══ -->
+  <div class="cat-block cb2b open" id="cb2b">
+    <button class="cat-trigger" onclick="toggleCat('cb2b')">
+      <div class="cat-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="3" stroke="#00E3FD" stroke-width="2"/><circle cx="5" cy="19" r="3" stroke="#00E3FD" stroke-width="2"/><circle cx="19" cy="19" r="3" stroke="#00E3FD" stroke-width="2"/><line x1="12" y1="8" x2="5" y2="16" stroke="#00E3FD" stroke-width="2"/><line x1="12" y1="8" x2="19" y2="16" stroke="#00E3FD" stroke-width="2"/></svg></div>
+      <div class="cat-title"><span style="color:#fff">B2B</span> <span class="ab2b">Transformation</span></div>
+      <div class="cat-meta"><span class="cat-count">4 demos</span><div class="cat-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    </button>
+    <div class="demos-wrap">
+
+      <div class="demo-item" id="d-anon">
+        <button class="demo-trigger" onclick="toggleDemo('d-anon')">
+          <span class="demo-trigger-name">Anonymous Intent Detection</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-b2b"><div class="best-for-label cl-b2b">Best for</div><div class="best-for-text">B2B marketers targeting accounts that haven't raised their hand yet</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">AEM Sites</span><span class="tag adobe-tag">Adobe Journey Optimizer B2B</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag adobe-tag">Adobe Marketo</span><span class="tag adobe-tag">Firefly API</span><span class="tag other-tag">Merkury Tag</span><span class="tag other-tag">Custom AI Modeling</span></div>
+          <div class="demo-summary">Identifies and activates in-market accounts before they ever raise their hand, using behavioral signals to trigger personalized outreach in real time.</div>
+          <div class="takeaways-heading cl-b2b">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>No login required:</strong> Merkury resolves anonymous visitors at the account level — intent is actionable before any form fill.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Real-time scoring:</strong> Intent scoring runs inside AEP the moment a visitor lands — no batch processing, no delay.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Automatic first touch:</strong> AJO B2B or Marketo orchestrates the first marketing action automatically, closing the gap between signal and response.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Account-level precision:</strong> Individual visitors are resolved to company accounts — sales and marketing see the same picture.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Firefly API in the loop:</strong> Personalized creative is generated via Firefly API and served based on the resolved intent profile.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Built on Merkury Tag:</strong> The Merkury tag layer does the identity work — no separate CDP integration or custom instrumentation required.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-buying">
+        <button class="demo-trigger" onclick="toggleDemo('d-buying')">
+          <span class="demo-trigger-name">Buying Group Engagement</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-b2b"><div class="best-for-label cl-b2b">Best for</div><div class="best-for-text">B2B marketers selling into complex, multi-stakeholder accounts</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Journey Optimizer B2B</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag adobe-tag">Adobe Marketo</span><span class="tag adobe-tag">Firefly API</span><span class="tag other-tag">Merkury Tag</span><span class="tag other-tag">Custom AI Modeling</span><span class="tag other-tag">Salesforce CRM</span></div>
+          <div class="demo-summary">Orchestrates tailored content and timing across every member of a buying committee, closing the gap between awareness and pipeline.</div>
+          <div class="takeaways-heading cl-b2b">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>One account, multiple journeys:</strong> AJO B2B manages the complexity of multi-role buying groups so marketers don't build separate campaigns per persona.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Marketo + AJO together:</strong> Marketo handles execution, AJO B2B owns the orchestration logic — both platforms work at their strengths.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Salesforce CRM connected:</strong> Opportunity data from Salesforce informs which buying groups get accelerated — sales and marketing share a single signal.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>AI with human in the loop:</strong> AI scores, sequences, and generates creative per persona — with a human review step built in so marketers stay in control.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Digitizing the buying committee:</strong> Every member can be identified, mapped, and engaged with a coordinated ABM strategy at scale and precision never possible before.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>AEP as the profile layer:</strong> Every buying group member's behavior feeds into AEP — the orchestration layer draws on live data, not static lists.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-abc">
+        <button class="demo-trigger" onclick="toggleDemo('d-abc')">
+          <span class="demo-trigger-name">Account-Based Commerce</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-b2b"><div class="best-for-label cl-b2b">Best for</div><div class="best-for-text">B2B companies running both digital commerce and a direct sales motion</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Journey Optimizer B2B</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag adobe-tag">Adobe Marketo</span><span class="tag adobe-tag">Firefly API</span><span class="tag other-tag">Merkury Tag</span><span class="tag other-tag">Custom AI Modeling</span><span class="tag other-tag">Salesforce CRM</span><span class="tag other-tag">Marketo Sales Insight</span></div>
+          <div class="demo-summary">Aligns marketing and sales around a shared account intelligence layer that surfaces the right signal to the right rep at the right moment.</div>
+          <div class="takeaways-heading cl-b2b">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Storefront knows the account:</strong> The Commerce experience adapts before login — no friction, no generic landing page for known accounts.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Sales and Commerce in sync:</strong> AJO B2B connects CRM opportunity data to the live Commerce experience — reps and buyers are never out of step.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Self-serve meets assisted:</strong> Buyers move at their own pace online; reps are alerted at precisely the right moment to step in.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>360° account connectivity:</strong> CRM opportunities and renewals connect directly to real-time front-end experiences — back-office and storefront are one system.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Marketo Sales Insight:</strong> Sales reps see exactly what an account has done on the Commerce site — every page view, product interaction, and intent signal.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>No generic experiences:</strong> Pricing, product display, and content all adapt to the specific account — Commerce behaves like a dedicated sales portal.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-postsale">
+        <button class="demo-trigger" onclick="toggleDemo('d-postsale')">
+          <span class="demo-trigger-name">Post-Sale Expansion</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-b2b"><div class="best-for-label cl-b2b">Best for</div><div class="best-for-text">B2B companies with a post-sale growth motion or customer success team</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Journey Optimizer B2B</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag adobe-tag">Adobe Marketo</span><span class="tag adobe-tag">Firefly API</span><span class="tag other-tag">Salesforce CRM</span><span class="tag other-tag">Marketo Sales Insight</span></div>
+          <div class="demo-summary">Turns customer data into expansion opportunity by detecting adoption gaps and triggering upsell journeys before churn signals emerge.</div>
+          <div class="takeaways-heading cl-b2b">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Detect gaps early:</strong> AI models identify adoption gaps before they become churn signals — expansion conversations happen at the right time.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Automated upsell journeys:</strong> AJO B2B triggers expansion sequences based on product usage and account health data — not manual rep judgment.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>CRM-connected signals:</strong> Salesforce opportunity data informs which accounts are ready for expansion and which need attention first.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Marketo for nurture:</strong> Marketo executes the post-sale nurture tracks that keep customers engaged between renewal cycles.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>Firefly for relevance:</strong> Expansion creative is generated and personalized via Firefly API — the right message for the right product moment.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bb2b"></div><div class="takeaway-text"><strong>AEP as the data layer:</strong> Adobe Experience Platform unifies product usage, behavioral, and CRM data into the profile that drives every expansion decision.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ MODERN CRM ══ -->
+  <div class="cat-block ccrm" id="ccrm">
+    <button class="cat-trigger" onclick="toggleCat('ccrm')">
+      <div class="cat-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#F0C1C1" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="#F0C1C1" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#F0C1C1" stroke-width="2"/></svg></div>
+      <div class="cat-title"><span style="color:#fff">Modern</span> <span class="acrm">CRM</span></div>
+      <div class="cat-meta"><span class="cat-count">4 demos</span><div class="cat-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    </button>
+    <div class="demos-wrap">
+
+      <div class="demo-item" id="d-demystify">
+        <button class="demo-trigger" onclick="toggleDemo('d-demystify')">
+          <span class="demo-trigger-name">Demystify CX with Merkury</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-crm"><div class="best-for-label cl-crm">Best for</div><div class="best-for-text">Brands on AEM Sites or Adobe Commerce looking to activate anonymous traffic</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">AEM Sites</span><span class="tag adobe-tag">AEM EDS</span><span class="tag adobe-tag">Adobe Journey Optimizer</span><span class="tag adobe-tag">Adobe Commerce</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag other-tag">Merkury Tag Manager</span></div>
+          <div class="demo-summary">Brings together Merkle's tag management across AEM Sites & Commerce to create personalized CX. Most personalization requires a login — this shows how Merkury resolves identity before that happens.</div>
+          <div class="takeaways-heading cl-crm">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Anonymous ≠ invisible:</strong> Merkury resolves intent and demographic signals before any login — unknown visitors are still actionable.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>AEP does the heavy lifting:</strong> With Merkury feeding signals in, Adobe Target and AEP drive personalization at scale across every site visit.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Tag-driven identity:</strong> Merkury's tag layer connects AEM Sites and Commerce into a single identity and activation framework.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>No rip-and-replace:</strong> Merkury layers on top of existing infrastructure — brands don't need to rebuild to get identity resolution working.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Commerce-aware:</strong> Personalization extends into Adobe Commerce — product display, pricing, and recommendations all respond to resolved identity.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>AJO orchestration:</strong> Adobe Journey Optimizer picks up the identity signals downstream and executes the right journey automatically.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-ucp">
+        <button class="demo-trigger" onclick="toggleDemo('d-ucp')">
+          <span class="demo-trigger-name">Unified Customer Profile</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-crm"><div class="best-for-label cl-crm">Best for</div><div class="best-for-text">Brands with customer data spread across multiple systems, CDPs, or legacy platforms</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag adobe-tag">RTCDP</span><span class="tag adobe-tag">Adobe Journey Optimizer</span><span class="tag other-tag">Merkury Tag Manager</span><span class="tag other-tag">Custom AI Model</span></div>
+          <div class="demo-summary">Merges fragmented identity data into a single, real-time profile that powers every downstream personalization and decision.</div>
+          <div class="takeaways-heading cl-crm">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Four systems, one profile:</strong> Watch RT-CDP stitch records from four siloed systems into a single customer profile in real time.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Universal problem:</strong> Every brand in this room has this issue — RT-CDP is the resolution, not a workaround or a future-state aspiration.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Real-time activation:</strong> The profile updates the moment a signal fires — activation follows within seconds, not in the next batch cycle.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Revenue impact:</strong> Every siloed record is a missed personalization and a wasted impression. Unification directly recovers that lost value.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Merkury enrichment:</strong> Merkury Tag Manager adds identity resolution before the profile is built — known and unknown visitors both get unified.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>AJO-ready output:</strong> The unified profile feeds directly into Adobe Journey Optimizer — no additional mapping or transformation required.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-loyalty">
+        <button class="demo-trigger" onclick="toggleDemo('d-loyalty')">
+          <span class="demo-trigger-name">Gamification &amp; Loyalty</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-crm"><div class="best-for-label cl-crm">Best for</div><div class="best-for-text">Consumer brands running loyalty programs or looking to increase repeat engagement</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Journey Optimizer</span><span class="tag adobe-tag">Adobe Captivate</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag other-tag">Merkury Loyalty+</span><span class="tag other-tag">Custom AI Model</span></div>
+          <div class="demo-summary">Embeds behavioral incentives directly into the CX from email to web to drive repeat engagement and deepen brand affinity. See how it works with Burger King.</div>
+          <div class="takeaways-heading cl-crm">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Personalized, not broadcast:</strong> Every challenge and reward is tailored to the individual — not pushed to a segment or a generic tier.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Burger King at scale:</strong> The examples shown are live reference implementations — this is what the platform looks like running in production.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Merkury Loyalty+ as the engine:</strong> Merkle's own loyalty solution powers the mechanics and connects them to the broader technology stack.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>AJO for journey delivery:</strong> Adobe Journey Optimizer delivers gamification touchpoints across email, web, and app in a coordinated sequence.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>AEP for intelligence:</strong> Adobe Experience Platform provides the behavioral data that makes each challenge and reward feel relevant, not random.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Stack-agnostic integration:</strong> The loyalty layer connects to existing infrastructure — no full-platform rebuild required.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-cxconn">
+        <button class="demo-trigger" onclick="toggleDemo('d-cxconn')">
+          <span class="demo-trigger-name">Connected Customer Experience</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-crm"><div class="best-for-label cl-crm">Best for</div><div class="best-for-text">AEP teams dealing with data quality issues that only show up after activation</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag adobe-tag">Adobe App Builder</span><span class="tag other-tag">Snowflake</span><span class="tag other-tag">Databricks</span><span class="tag other-tag">Custom AI Model</span></div>
+          <div class="demo-summary">Autonomously monitors AEP data quality, surfaces anomalies, and recommends fixes before bad data reaches downstream activation.</div>
+          <div class="takeaways-heading cl-crm">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Autonomous monitoring:</strong> AI agents continuously scan AEP data quality without requiring manual QA runs or analyst time.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Anomaly detection:</strong> Issues are surfaced before they reach downstream activation — broken segments and bad signals are caught early.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Recommended fixes:</strong> The agent doesn't just flag problems — it recommends corrective actions with context on impact and priority.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Cross-platform visibility:</strong> Diagnostics run across AEP, Snowflake, and Databricks — the whole data layer, not just one system.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Reduced data debt:</strong> Ongoing agentic monitoring prevents the accumulation of unresolved data issues that slow teams down over time.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcrm"></div><div class="takeaway-text"><strong>Built on App Builder:</strong> The diagnostic layer is deployed via Adobe App Builder — extensible, governable, and native to the Adobe ecosystem.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ ENTERPRISE AI FOR CX ══ -->
+  <div class="cat-block cai" id="cai">
+    <button class="cat-trigger" onclick="toggleCat('cai')">
+      <div class="cat-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z" stroke="#A68CFF" stroke-width="2"/><circle cx="9" cy="10" r="1" fill="#A68CFF"/><circle cx="15" cy="10" r="1" fill="#A68CFF"/></svg></div>
+      <div class="cat-title"><span style="color:#fff">Enterprise</span> <span class="aai">AI for CX</span></div>
+      <div class="cat-meta"><span class="cat-count">4 demos</span><div class="cat-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    </button>
+    <div class="demos-wrap">
+
+      <div class="demo-item" id="d-concierge">
+        <button class="demo-trigger" onclick="toggleDemo('d-concierge')">
+          <span class="demo-trigger-name">Experience Concierge</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-ai"><div class="best-for-label cl-ai">Best for</div><div class="best-for-text">Retailers, B2C brands, or anyone running a digital storefront</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">AEM Assets</span><span class="tag adobe-tag">AEM Sites</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag adobe-tag">Adobe App Builder</span><span class="tag other-tag">Brand Concierge</span><span class="tag other-tag">Custom AI Model</span><span class="tag other-tag">Merkury Tag Management</span></div>
+          <div class="demo-summary">Deploys an AI-orchestrated layer across digital touchpoints that personalizes every interaction in real time, without human intervention.</div>
+          <div class="takeaways-heading cl-ai">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>No rules required:</strong> Personalization at this level used to take months of segments and engineering — the AI concierge does it in real time for every visitor.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>No login needed:</strong> The concierge surfaces the right products, offers, and content before any form fill or authentication.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Live, not a prototype:</strong> This is a working demo of what AI-generated CX looks like today — not a concept or a mockup.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Dynamic by design:</strong> Layout, content, product recommendations, and messaging all adapt in real time based on each visitor's intent signals.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Dual-sided value:</strong> The storefront serves both the consumer and the agent — every adaptation is driven by data, not assumptions.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Flexible architecture:</strong> Can be scoped to a full Adobe stack or partial — AJO, AEM, and Brand Concierge all integrate modularly.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-aem-mig">
+        <button class="demo-trigger" onclick="toggleDemo('d-aem-mig')">
+          <span class="demo-trigger-name">AEM Migration Agent</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-ai"><div class="best-for-label cl-ai">Best for</div><div class="best-for-text">Brands facing an AEM migration or large-scale site re-platform</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">AEM Sites</span><span class="tag adobe-tag">AEM EDS</span><span class="tag adobe-tag">AEM Assets</span><span class="tag adobe-tag">Firefly API</span><span class="tag adobe-tag">Adobe App Builder</span><span class="tag adobe-tag">Workfront Workflow</span><span class="tag other-tag">Custom AI Models</span></div>
+          <div class="demo-summary">Automates the heavy lifting of AEM content migration, reducing manual effort and risk while preserving content structure and metadata integrity.</div>
+          <div class="takeaways-heading cl-ai">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>AI-guided end-to-end:</strong> Section selection, field mapping, template assignment, and deployment to dev — no manual orchestration at any step.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Content enrichment built in:</strong> Every migrated page gets AI-generated meta, schema markup, author signals, and 301 redirects applied automatically.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Measurable SEO lift:</strong> Migration is projected to move SEO score from 52 to 84 and LLM visibility from 22 to 79, with new keywords auto-identified.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Parallel workstreams:</strong> Page Builder, Copy Creator, Firefly, and AEM Assets run alongside migration — creative and technical work happen together.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Live progress view:</strong> The dashboard shows migration progress by section, optimization scores, and a go-live Gantt in a single stakeholder view.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Multi-brand architecture:</strong> One AEM platform governs the main site, campaigns, and microsites under a unified Active Experience model.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-schemaiq">
+        <button class="demo-trigger" onclick="toggleDemo('d-schemaiq')">
+          <span class="demo-trigger-name">SchemaIQ for AEP</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-ai"><div class="best-for-label cl-ai">Best for</div><div class="best-for-text">Data engineers, architects, and AEP practitioners tired of tribal knowledge</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag adobe-tag">RTCDP</span><span class="tag adobe-tag">Adobe App Builder</span><span class="tag other-tag">Custom AI Model</span></div>
+          <div class="demo-summary">Accelerates AEP data readiness by intelligently mapping, validating, and governing schemas so teams spend less time wrangling data and more time activating it.</div>
+          <div class="takeaways-heading cl-ai">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Full data inventory:</strong> A complete, digestible view of everything inside your AEP instance — schemas, datasets, and field definitions in one place.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Automated data dictionary:</strong> Field definitions, data types, and lineage are generated automatically — no manual documentation effort required.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Schema alignment:</strong> Gaps and misalignments across schemas are identified before they cause downstream activation failures.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Faster onboarding:</strong> New team members and partners can understand the full data model in hours rather than weeks.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Proactive governance:</strong> Data quality issues and compliance gaps are surfaced before they reach activation — not after campaigns have already run.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>AEP acceleration:</strong> Teams spend less time wrangling schemas and more time building audiences, activating journeys, and driving outcomes.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-media">
+        <button class="demo-trigger" onclick="toggleDemo('d-media')">
+          <span class="demo-trigger-name">Personalized Media Deployment</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-ai"><div class="best-for-label cl-ai">Best for</div><div class="best-for-text">Media planners, performance marketers, and agencies managing full-funnel campaigns</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Firefly</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag other-tag">Dentsu Connect</span><span class="tag other-tag">Custom AI Model</span><span class="tag other-tag">Dentsu Audience Builder</span><span class="tag other-tag">Dentsu Strategy Builder</span><span class="tag other-tag">Clinch</span></div>
+          <div class="demo-summary">See how Dentsu's connected stack unifies media planning, creative personalization, and campaign activation across Dentsu Connect, Clinch, and beyond.</div>
+          <div class="takeaways-heading cl-ai">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>End-to-end in one stack:</strong> Media planning, audience building, creative personalization, and activation all run through Dentsu's connected platform.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Dentsu Connect as the hub:</strong> Connect ties together strategy, audience, and execution tools — eliminating the handoff gaps between teams.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Clinch for dynamic creative:</strong> Clinch handles dynamic creative optimization at the delivery layer — the right version of the ad to the right person.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>AI-assisted planning:</strong> Dentsu Audience Builder and Strategy Builder apply AI to media planning before a single dollar is spent.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>AEP as the data foundation:</strong> Adobe Experience Platform provides the audience intelligence that powers targeting across the entire media stack.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bai"></div><div class="takeaway-text"><strong>Firefly for creative scale:</strong> Adobe Firefly generates on-brand creative variants at speed — reducing production time and legal risk simultaneously.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ CONTENT SUPPLY CHAIN ══ -->
+  <div class="cat-block ccsc" id="ccsc">
+    <button class="cat-trigger" onclick="toggleCat('ccsc')">
+      <div class="cat-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="6" height="6" rx="1" stroke="#FF7443" stroke-width="2"/><rect x="16" y="3" width="6" height="6" rx="1" stroke="#FF7443" stroke-width="2"/><rect x="9" y="15" width="6" height="6" rx="1" stroke="#FF7443" stroke-width="2"/><path d="M5 9v3h14V9M12 12v3" stroke="#FF7443" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div class="cat-title"><span style="color:#fff">Content</span> <span class="acsc">Supply Chain</span></div>
+      <div class="cat-meta"><span class="cat-count">4 demos</span><div class="cat-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    </button>
+    <div class="demos-wrap">
+
+      <div class="demo-item" id="d-genstudio">
+        <button class="demo-trigger" onclick="toggleDemo('d-genstudio')">
+          <span class="demo-trigger-name">GenStudio Dentsu+</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-csc"><div class="best-for-label cl-csc">Best for</div><div class="best-for-text">Agencies and in-house teams managing high-volume creative production and paid media</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">GenStudio for Performance Marketing</span><span class="tag adobe-tag">AEM Assets</span><span class="tag adobe-tag">Adobe Firefly</span><span class="tag adobe-tag">Workfront Workflow</span><span class="tag adobe-tag">Workfront Fusion</span><span class="tag other-tag">Dentsu Connect</span></div>
+          <div class="demo-summary">A Dentsu-configured GenStudio environment with enterprise guardrails, custom templates, and accelerated approval workflows built for high-velocity marketing teams.</div>
+          <div class="takeaways-heading cl-csc">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>One integrated workspace:</strong> Creative production, AI content, audience targeting, and campaign execution run in a single coordinated workflow.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Firefly at scale:</strong> On-brand visual variants are generated commercially safely, brand-governed, and ready for review inside the same platform.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Audiences meet creative:</strong> Targeting segments are linked directly to creative variants — the right asset is matched to the right audience automatically.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>No handoff friction:</strong> Campaign delivery flows directly from GenStudio to trafficking — no spreadsheets, no file transfers, no version confusion.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Performance feeds back in:</strong> Live campaign data returns to GenStudio and informs the next production cycle — the system gets smarter over time.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>A flywheel, not a tool:</strong> Every campaign makes the next one more informed. GenStudio Dentsu+ is the operating system for creative, targeting, and execution.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-continuum">
+        <button class="demo-trigger" onclick="toggleDemo('d-continuum')">
+          <span class="demo-trigger-name">GenStudio Content Continuum</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-csc"><div class="best-for-label cl-csc">Best for</div><div class="best-for-text">Content teams and creative ops leads managing multi-stage production workflows</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">GenStudio for Performance Marketing</span><span class="tag adobe-tag">AEM Assets</span><span class="tag adobe-tag">Adobe Firefly</span><span class="tag adobe-tag">Adobe Express</span><span class="tag adobe-tag">Workfront Planning</span><span class="tag adobe-tag">Workfront Fusion</span><span class="tag adobe-tag">Adobe Journey Optimizer</span></div>
+          <div class="demo-summary">Connects content planning, production, and performance in a closed loop so every asset informs the next brief.</div>
+          <div class="takeaways-heading cl-csc">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Full supply chain on one screen:</strong> Seeing the entire content pipeline from brief to performance in a single view is something most teams have never experienced.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Fusion eliminates handoffs:</strong> Workfront Fusion automates transitions between tools — no more work getting lost, delayed, or duplicated in the gaps.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Live, not hypothetical:</strong> This is a working configuration of tools that exist today — not a vision or a roadmap item.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>AJO closes the loop:</strong> Adobe Journey Optimizer connects content output to actual delivery — performance data flows back into the planning cycle.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Planning to activation:</strong> From Workfront Planning through production to AEM and GenStudio — every stage is connected and trackable.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Compounding efficiency:</strong> Each cycle through the continuum produces better briefs, faster production, and more relevant content — the system improves itself.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-brand-intel">
+        <button class="demo-trigger" onclick="toggleDemo('d-brand-intel')">
+          <span class="demo-trigger-name">Brand Intelligence Agent</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-csc"><div class="best-for-label cl-csc">Best for</div><div class="best-for-text">Marketing teams that re-enter brand settings into every new tool they onboard</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Adobe Express</span><span class="tag adobe-tag">Adobe Journey Optimizer</span><span class="tag adobe-tag">Adobe App Builder</span><span class="tag adobe-tag">AEM Assets</span><span class="tag adobe-tag">Workfront</span><span class="tag adobe-tag">Creative Cloud</span><span class="tag adobe-tag">Adobe Firefly</span><span class="tag adobe-tag">GenStudio for Performance Marketing</span><span class="tag other-tag">Custom AI Modeling</span></div>
+          <div class="demo-summary">Monitors content output across channels and flags brand inconsistencies before they ship, keeping creative execution aligned to brand standards at scale.</div>
+          <div class="takeaways-heading cl-csc">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Brand setup automated:</strong> AI scrapes the organization's website and brand docs to extract palette, fonts, voice, personas, and campaigns — fully pre-populated.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>One source of truth:</strong> A single brand kit publishes to Journey Optimizer, Marketo, GenStudio, Express, Creative Cloud, Workfront, and Firefly simultaneously.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Eliminates repetition:</strong> Brand setup today is manual and repeated across every tool. This does that work once and syncs it everywhere.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Prototype with real tools:</strong> This is a working prototype built on tools that exist today — not a concept. The integration points are live and testable.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Governance at the source:</strong> Brand standards are enforced at the kit level — downstream tools pull from the same governed definitions automatically.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Reduces brand drift:</strong> When brand setup lives in one place and pushes everywhere, off-brand executions become structurally harder to produce.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="demo-item" id="d-orchestrator">
+        <button class="demo-trigger" onclick="toggleDemo('d-orchestrator')">
+          <span class="demo-trigger-name">Initiative Orchestrator</span>
+          <div class="demo-trigger-right"><div class="demo-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </button>
+        <div class="demo-body"><div class="demo-body-inner">
+          <div class="best-for bf-csc"><div class="best-for-label cl-csc">Best for</div><div class="best-for-text">Marketing ops and program managers running multi-team campaign initiatives</div></div>
+          <div class="tags-row"><span class="tag adobe-tag">Workfront Planner</span><span class="tag adobe-tag">Workfront Workflow</span><span class="tag adobe-tag">Adobe Journey Optimizer</span><span class="tag adobe-tag">Workfront Fusion</span><span class="tag adobe-tag">Adobe Analytics</span><span class="tag adobe-tag">Adobe Firefly</span><span class="tag adobe-tag">Adobe Experience Platform</span><span class="tag other-tag">Figma</span></div>
+          <div class="demo-summary">Coordinates AI agents across campaign initiatives to ensure goals, budgets, and content stay aligned as conditions change.</div>
+          <div class="takeaways-heading cl-csc">Key Takeaways</div>
+          <div class="takeaways-grid">
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Campaign coordination at scale:</strong> Workfront connects planning, creative, and execution into one orchestrated workflow — no tool switching, no lost context.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Budgets stay aligned:</strong> As priorities shift, the orchestrator realigns spend and resource allocation automatically across active initiatives.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>AJO as the activator:</strong> Journey Optimizer receives the campaign signal from Workfront and executes the right experience at the right moment.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Fusion as the backbone:</strong> Workfront Fusion handles automation between tools — approvals, asset handoffs, and status updates run without manual effort.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Analytics closes the loop:</strong> Adobe Analytics data feeds performance back into the planning layer — the next initiative starts with real signal, not assumptions.</div></div>
+            <div class="takeaway-item"><div class="takeaway-bullet bcsc"></div><div class="takeaway-text"><strong>Figma to production:</strong> Design work in Figma connects directly to the workflow — creative review and approval happen in the same system as execution.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="h-rule"></div>
+  <div class="content-pills">
+    <button class="content-pill teal"   onclick="openContentModal('positioning')">Our Positioning</button>
+    <button class="content-pill purple" onclick="openContentModal('differentiator')">Our Differentiator</button>
+    <button class="content-pill red"    onclick="openContentModal('sins')">The 7 Deadly Sins</button>
+  </div>
+  <div style="height:32px"></div>
+
+</div>
+
+<script>
+  // ---- PERSON COLORS ----
+  const PEOPLE = {
+    "Natasha N.":   { bg: "#d4b8f0", text: "#2a1a40" },
+    "Barry L.":     { bg: "#b8d8f0", text: "#0f2a3a" },
+    "Michael R.":   { bg: "#b8f0d4", text: "#0f3a20" },
+    "Shaun S.":     { bg: "#f0d4b8", text: "#3a200f" },
+    "Ilona Y.":     { bg: "#f0b8d4", text: "#3a0f20" },
+    "Melissarae B.":{ bg: "#b8f0b8", text: "#0f3a0f" },
+    "Anne D.":      { bg: "#f0b8b8", text: "#3a0f0f" },
+    "Austin M.":    { bg: "#e0e0e0", text: "#2a2a2a" }
+  };
+
+  const SCHEDULE = {
+    mon: {
+      label: "Monday",
+      hours: "9:00 AM – 7:30 PM PST",
+      slots: [
+        { time: "9:00 – 9:30 AM",     people: ["Barry L.", "Ilona Y.", "Shaun S.", "Anne D."] },
+        { time: "9:30 – 10:00 AM",    people: ["Barry L.", "Ilona Y.", "Shaun S.", "Austin M."] },
+        { time: "10:00 – 11:00 AM",   people: ["Natasha N.", "Barry L.", "Ilona Y.", "Anne D."] },
+        { time: "11:00 AM – 12:30 PM",people: ["Natasha N.", "Ilona Y.", "Shaun S.", "Melissarae B."] },
+        { time: "12:30 – 2:00 PM",    people: ["Natasha N.", "Barry L.", "Ilona Y.", "Austin M."] },
+        { time: "2:00 – 3:30 PM",     people: ["Natasha N.", "Michael R.", "Ilona Y.", "Shaun S."] },
+        { time: "3:30 – 5:00 PM",     people: ["Natasha N.", "Barry L.", "Ilona Y.", "Anne D."] },
+        { time: "5:00 – 6:00 PM",     people: ["Natasha N.", "Ilona Y.", "Melissarae B.", "Austin M."] },
+        { time: "6:00 – 7:30 PM",     people: ["Barry L.", "Ilona Y.", "Shaun S.", "Anne D."] }
+      ]
+    },
+    tue: {
+      label: "Tuesday",
+      hours: "10:30 AM – 6:00 PM PST",
+      slots: [
+        { time: "10:30 – 11:00 AM",   people: ["Natasha N.", "Barry L.", "Ilona Y.", "Shaun S."] },
+        { time: "11:00 – 11:45 AM",   people: ["Barry L.", "Ilona Y.", "Anne D.", "Austin M."] },
+        { time: "11:45 AM – 12:30 PM",people: ["Natasha N.", "Michael R.", "Ilona Y.", "Melissarae B."] },
+        { time: "12:30 – 2:00 PM",    people: ["Natasha N.", "Barry L.", "Ilona Y.", "Shaun S."] },
+        { time: "2:00 – 2:30 PM",     people: ["Natasha N.", "Barry L.", "Ilona Y.", "Anne D."] },
+        { time: "2:30 – 3:30 PM",     people: ["Barry L.", "Ilona Y.", "Shaun S.", "Melissarae B."] },
+        { time: "3:30 – 4:30 PM",     people: ["Natasha N.", "Barry L.", "Ilona Y.", "Austin M."] },
+        { time: "4:30 – 6:00 PM",     people: ["Natasha N.", "Ilona Y.", "Anne D.", "Shaun S."] }
+      ]
+    },
+    wed: {
+      label: "Wednesday",
+      hours: "10:00 AM – 3:00 PM PST",
+      slots: [
+        { time: "10:00 – 11:00 AM",   people: ["Natasha N.", "Barry L.", "Ilona Y.", "Shaun S."] },
+        { time: "11:00 AM – 12:00 PM",people: ["Natasha N.", "Ilona Y.", "Michael R.", "Anne D."] },
+        { time: "12:00 – 1:00 PM",    people: ["Barry L.", "Ilona Y.", "Melissarae B.", "Austin M."] },
+        { time: "1:00 – 2:00 PM",     people: ["Barry L.", "Ilona Y.", "Shaun S.", "Anne D."] },
+        { time: "2:00 – 3:00 PM",     people: ["Ilona Y.", "Barry L.", "Melissarae B.", "Austin M."] }
+      ]
+    }
+  };
+
+  function pillHTML(name, cls) {
+    const c = PEOPLE[name] || { bg: "#555", text: "#fff" };
+    return `<div class="${cls}" style="background:${c.bg};color:${c.text}">${name}</div>`;
+  }
+
+  function openSchedule(day) {
+    const d = SCHEDULE[day];
+    document.getElementById("sched-day-label").textContent = d.label;
+    document.getElementById("sched-hours").textContent = d.hours;
+
+    // legend — unique people this day
+    const seen = new Set();
+    d.slots.forEach(s => s.people.forEach(p => seen.add(p)));
+    document.getElementById("sched-legend").innerHTML =
+      [...seen].map(n => pillHTML(n, "legend-pill")).join("");
+
+    // slots
+    document.getElementById("sched-body").innerHTML = d.slots.map(s => `
+      <div class="sched-slot">
+        <div class="sched-time">${s.time}</div>
+        <div class="sched-names">${s.people.map(n => pillHTML(n, "sched-name-pill")).join("")}</div>
+      </div>`).join("");
+
+    document.getElementById("sched-overlay").classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeScheduleBtn() {
+    document.getElementById("sched-overlay").classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function closeSchedule(e) {
+    if (e.target === document.getElementById("sched-overlay")) closeScheduleBtn();
+  }
+
+  function toggleCat(id) {
+    const el = document.getElementById(id);
+    const isOpen = el.classList.contains('open');
+    // close all cats and all demos inside them
+    document.querySelectorAll('.cat-block').forEach(c => c.classList.remove('open'));
+    document.querySelectorAll('.demo-item').forEach(d => d.classList.remove('open'));
+    if (!isOpen) el.classList.add('open');
+  }
+  function toggleDemo(id) {
+    const el = document.getElementById(id);
+    const isOpen = el.classList.contains('open');
+    // close all demos in the same category
+    el.closest('.demos-wrap').querySelectorAll('.demo-item').forEach(d => d.classList.remove('open'));
+    if (!isOpen) el.classList.add('open');
+  }
+
+  function openContentModal(id) {
+    document.getElementById('overlay-' + id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeContentModalBtn(id) {
+    document.getElementById('overlay-' + id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeContentModal(id, e) {
+    if (e.target === document.getElementById('overlay-' + id)) closeContentModalBtn(id);
+  }
+</script>
+</body>
+</html>
