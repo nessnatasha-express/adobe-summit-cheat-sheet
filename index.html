@@ -83,7 +83,14 @@
   .cat-icon-wrap { width:34px; height:34px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .cat-title { font-size:20px; font-weight:800; letter-spacing:-0.5px; flex:1; }
   .cat-meta { display:flex; align-items:center; gap:12px; flex-shrink:0; }
-  .cat-count { font-family:'Space Grotesk',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#444; }
+  .cat-count {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: #ccc; font-weight: 600;
+    padding: 4px 12px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
+  }
   .cat-chevron { width:18px; height:18px; color:#444; transition:transform 0.3s ease, color 0.2s; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
   .cat-block.open .cat-chevron { transform:rotate(180deg); color:#666; }
 
@@ -241,7 +248,7 @@
   }
   .sched-hours {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #555; margin-top: 5px;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #fff; margin-top: 5px;
   }
   .sched-legend {
     display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px;
@@ -400,6 +407,31 @@
     font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
     font-weight: 600; margin-bottom: 10px; margin-top: 18px;
   }
+
+  .sched-header-rule { height: 1px; background: rgba(255,255,255,0.08); margin: 14px 0 12px; }
+  .sched-notes { margin-bottom: 14px; display: none; }
+  .sched-note {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; color: #888; line-height: 1.6;
+    padding: 4px 0;
+  }
+  .sched-note strong { color: #fff; font-weight: 600; }
+  .sched-section-header {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    font-weight: 600; color: #fff;
+    padding: 14px 0 6px;
+  }
+  .sched-divider {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #444;
+  }
+  .sched-divider::before, .sched-divider::after {
+    content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06);
+  }
 </style>
 </head>
 <body>
@@ -448,6 +480,8 @@
       <div class="sched-day-label" id="sched-day-label"></div>
       <div class="sched-hours" id="sched-hours"></div>
     </div>
+    <div class="sched-header-rule"></div>
+    <div class="sched-notes" id="sched-notes"></div>
     <div class="sched-legend" id="sched-legend"></div>
     <div class="sched-body" id="sched-body"></div>
     <div class="sched-footer">All times PST &middot; Las Vegas &middot; 4 people per slot maintained throughout</div>
@@ -971,55 +1005,60 @@
 <script>
   // ---- PERSON COLORS ----
   const PEOPLE = {
-    "Natasha N.":   { bg: "#d4b8f0", text: "#2a1a40" },
-    "Barry L.":     { bg: "#b8d8f0", text: "#0f2a3a" },
-    "Michael R.":   { bg: "#b8f0d4", text: "#0f3a20" },
-    "Shaun S.":     { bg: "#f0d4b8", text: "#3a200f" },
-    "Ilona Y.":     { bg: "#f0b8d4", text: "#3a0f20" },
-    "Melissarae B.":{ bg: "#b8f0b8", text: "#0f3a0f" },
-    "Anne D.":      { bg: "#f0b8b8", text: "#3a0f0f" },
-    "Austin M.":    { bg: "#e0e0e0", text: "#2a2a2a" }
+    "Natasha N.":    { bg: "#d4b8f0", text: "#2a1a40" },
+    "Barry L.":      { bg: "#b8d8f0", text: "#0f2a3a" },
+    "Michael R.":    { bg: "#b8f0d4", text: "#0f3a20" },
+    "Shaun S.":      { bg: "#f0d4b8", text: "#3a200f" },
+    "Ilona Y.":      { bg: "#f0b8d4", text: "#3a0f20" },
+    "Melissarae B.": { bg: "#b8f0b8", text: "#0f3a0f" },
+    "Anne D.":       { bg: "#f0b8b8", text: "#3a0f0f" },
+    "Austin M.":     { bg: "#e0e0e0", text: "#2a2a2a" },
+    "Sayantika S.":  { bg: "#fde68a", text: "#3a2a00" }
   };
 
   const SCHEDULE = {
     mon: {
-      label: "Monday",
-      hours: "9:00 AM – 7:30 PM PST",
+      label: "Monday, April 20",
+      hours: "Open 9:00 AM – 1:30 PM · 3:30 PM – 7:30 PM · Soft Close 1:30–3:30 PM",
+      notes: [
+        "<strong>Peak Traffic:</strong> 12:00–1:30 PM · 4:00–4:30 PM · 6:00–7:30 PM (Welcome Reception)",
+        "<strong>Sponsor setup:</strong> 7:00–9:00 AM · Sponsor early lunch access: 11:00 AM–1:00 PM"
+      ],
       slots: [
-        { time: "9:00 – 9:30 AM",     people: ["Barry L.", "Ilona Y.", "Shaun S.", "Anne D."] },
-        { time: "9:30 – 10:00 AM",    people: ["Barry L.", "Ilona Y.", "Shaun S.", "Austin M."] },
-        { time: "10:00 – 11:00 AM",   people: ["Natasha N.", "Barry L.", "Ilona Y.", "Anne D."] },
-        { time: "11:00 AM – 12:30 PM",people: ["Natasha N.", "Ilona Y.", "Shaun S.", "Melissarae B."] },
-        { time: "12:30 – 2:00 PM",    people: ["Natasha N.", "Barry L.", "Ilona Y.", "Austin M."] },
-        { time: "2:00 – 3:30 PM",     people: ["Natasha N.", "Michael R.", "Ilona Y.", "Shaun S."] },
-        { time: "3:30 – 5:00 PM",     people: ["Natasha N.", "Barry L.", "Ilona Y.", "Anne D."] },
-        { time: "5:00 – 6:00 PM",     people: ["Natasha N.", "Ilona Y.", "Melissarae B.", "Austin M."] },
-        { time: "6:00 – 7:30 PM",     people: ["Barry L.", "Ilona Y.", "Shaun S.", "Anne D."] }
+        { time: "9:00 AM – 11:00 AM",  header: true, label: "Demo Station Leads", people: [] },
+        { time: "9:00 – 11:00 AM",     people: ["Natasha N.", "Anne D.", "Barry L.", "Ilona Y.", "Sayantika S.", "Shaun S."] },
+        { time: "11:00 AM – 1:30 PM",  people: ["Natasha N.", "Anne D.", "Barry L.", "Ilona Y.", "Sayantika S.", "Shaun S."] },
+        { time: "— Soft Close —",      divider: true, people: [] },
+        { time: "3:30 – 5:30 PM",      people: ["Natasha N.", "Barry L.", "Ilona Y.", "Michael R.", "Sayantika S.", "Shaun S."] },
+        { time: "5:30 – 7:30 PM",      people: ["Natasha N.", "Barry L.", "Ilona Y.", "Michael R.", "Sayantika S.", "Shaun S."] }
       ]
     },
     tue: {
-      label: "Tuesday",
-      hours: "10:30 AM – 6:00 PM PST",
+      label: "Tuesday, April 21",
+      hours: "Open 10:30 AM – 6:00 PM",
+      notes: [
+        "<strong>Peak Traffic:</strong> 12:00–1:30 PM · 5:00–6:00 PM (Community Mixer)",
+        "<strong>Sponsor setup:</strong> 8:00–10:30 AM · Sponsor early lunch access: 11:00 AM–1:00 PM"
+      ],
       slots: [
-        { time: "10:30 – 11:00 AM",   people: ["Natasha N.", "Barry L.", "Ilona Y.", "Shaun S."] },
-        { time: "11:00 – 11:45 AM",   people: ["Barry L.", "Ilona Y.", "Anne D.", "Austin M."] },
-        { time: "11:45 AM – 12:30 PM",people: ["Natasha N.", "Michael R.", "Ilona Y.", "Melissarae B."] },
-        { time: "12:30 – 2:00 PM",    people: ["Natasha N.", "Barry L.", "Ilona Y.", "Shaun S."] },
-        { time: "2:00 – 2:30 PM",     people: ["Natasha N.", "Barry L.", "Ilona Y.", "Anne D."] },
-        { time: "2:30 – 3:30 PM",     people: ["Barry L.", "Ilona Y.", "Shaun S.", "Melissarae B."] },
-        { time: "3:30 – 4:30 PM",     people: ["Natasha N.", "Barry L.", "Ilona Y.", "Austin M."] },
-        { time: "4:30 – 6:00 PM",     people: ["Natasha N.", "Ilona Y.", "Anne D.", "Shaun S."] }
+        { time: "10:30 AM – 12:00 PM", header: true, label: "Demo Station Leads", people: [] },
+        { time: "10:30 AM – 12:00 PM", people: ["Barry L.", "Ilona Y.", "Michael R.", "Sayantika S.", "Shaun S."] },
+        { time: "12:00 – 2:00 PM",     people: ["Natasha N.", "Barry L.", "Ilona Y.", "Michael R.", "Sayantika S.", "Shaun S."] },
+        { time: "2:00 – 4:00 PM",      people: ["Natasha N.", "Anne D.", "Barry L.", "Ilona Y.", "Sayantika S.", "Shaun S."] },
+        { time: "4:00 – 6:00 PM",      people: ["Natasha N.", "Anne D.", "Barry L.", "Ilona Y.", "Sayantika S.", "Shaun S."] }
       ]
     },
     wed: {
-      label: "Wednesday",
-      hours: "10:00 AM – 3:00 PM PST",
+      label: "Wednesday, April 22",
+      hours: "Open 10:00 AM – 3:00 PM",
+      notes: [
+        "<strong>Peak Traffic:</strong> 11:30 AM – 1:30 PM",
+        "<strong>Sponsor setup:</strong> 8:00–10:00 AM · Sponsor early lunch access: 11:00 AM–1:00 PM"
+      ],
       slots: [
-        { time: "10:00 – 11:00 AM",   people: ["Natasha N.", "Barry L.", "Ilona Y.", "Shaun S."] },
-        { time: "11:00 AM – 12:00 PM",people: ["Natasha N.", "Ilona Y.", "Michael R.", "Anne D."] },
-        { time: "12:00 – 1:00 PM",    people: ["Barry L.", "Ilona Y.", "Melissarae B.", "Austin M."] },
-        { time: "1:00 – 2:00 PM",     people: ["Barry L.", "Ilona Y.", "Shaun S.", "Anne D."] },
-        { time: "2:00 – 3:00 PM",     people: ["Ilona Y.", "Barry L.", "Melissarae B.", "Austin M."] }
+        { time: "10:00 AM – 1:00 PM", header: true, label: "Demo Station Leads", people: [] },
+        { time: "10:00 AM – 1:00 PM", people: ["Natasha N.", "Sayantika S.", "Shaun S."] },
+        { time: "1:00 – 3:00 PM",     people: ["Anne D.", "Barry L.", "Ilona Y."] }
       ]
     }
   };
@@ -1034,18 +1073,31 @@
     document.getElementById("sched-day-label").textContent = d.label;
     document.getElementById("sched-hours").textContent = d.hours;
 
-    // legend — unique people this day
+    // notes
+    const notesEl = document.getElementById("sched-notes");
+    if (d.notes && d.notes.length) {
+      notesEl.innerHTML = d.notes.map(n => `<div class="sched-note">${n}</div>`).join(""); // HTML allowed
+      notesEl.style.display = "block";
+    } else {
+      notesEl.innerHTML = "";
+      notesEl.style.display = "none";
+    }
+
+    // legend — unique people this day (skip header/divider rows)
     const seen = new Set();
-    d.slots.forEach(s => s.people.forEach(p => seen.add(p)));
+    d.slots.forEach(s => { if (!s.header && !s.divider) s.people.forEach(p => seen.add(p)); });
     document.getElementById("sched-legend").innerHTML =
       [...seen].map(n => pillHTML(n, "legend-pill")).join("");
 
     // slots
-    document.getElementById("sched-body").innerHTML = d.slots.map(s => `
-      <div class="sched-slot">
+    document.getElementById("sched-body").innerHTML = d.slots.map(s => {
+      if (s.header) return `<div class="sched-section-header">${s.label}</div>`;
+      if (s.divider) return `<div class="sched-divider"><span>${s.time}</span></div>`;
+      return `<div class="sched-slot">
         <div class="sched-time">${s.time}</div>
         <div class="sched-names">${s.people.map(n => pillHTML(n, "sched-name-pill")).join("")}</div>
-      </div>`).join("");
+      </div>`;
+    }).join("");
 
     document.getElementById("sched-overlay").classList.add("open");
     document.body.style.overflow = "hidden";
